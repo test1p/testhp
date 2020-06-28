@@ -7,7 +7,7 @@
             height="100%"
             tile
         >
-            <v-container :class="($route.path == '/')? 'py-10' : 'pt-1 pt-sm-3 pb-16'">
+            <v-container :class="($route.path == '/')? 'py-10' : 'pt-2 pb-16'">
                 <Bread v-if="layout.bread && $route.path !='/'" :menu="menu" />
                 <Title :menuBg="menuBg" :menu="menu" />
                 <template v-if="menu.section">

@@ -8,7 +8,7 @@
             height="100%"
             tile
         >
-            <v-container :class="(!$route.params.id)? 'py-10' : 'pt-1 pt-sm-3 px-0' " :style="(section.bgImg)? 'height:100%;' : 'height:100%;min-height:50vh;'">
+            <v-container :class="(!$route.params.id)? 'py-10' : 'pt-2 pb-10 px-sm-0' " :style="(section.bgImg)? 'height:100%;' : 'height:100%;min-height:50vh;'">
                 <Bread v-if="layout.bread && $route.params.id" :section="section" />
                 <v-row style="height:100%;" class="justify-center align-center">
                     <v-col

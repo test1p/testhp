@@ -14,9 +14,10 @@
                     height="100%"
                     tile
                 >
-                    <v-row class="justify-center align-center" style="height:100%;">
+                    <v-row no-gutters class="justify-center align-center" style="height:100%;">
                         <v-col
                             cols="12"
+                            class="px-4 py-2"
                             v-html="menu.contents"
                         ></v-col>
                     </v-row>

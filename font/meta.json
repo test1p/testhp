@@ -14,5 +14,9 @@
   {
     "name": "circle",
     "codepoint": "F0765"
+  },
+  {
+    "name": "home",
+    "codepoint": "F02DC"
   }
 ]
