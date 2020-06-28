@@ -30,7 +30,7 @@
                             v-if="menu.date"
                             :style="`color: ${color.date};`"
                         >
-                            {{ (section.date)? section.date : section.updatedAt | format-date }}
+                            {{ (section.date)? $dayjs(section.date).format('YYYY年M月D日(ddd)') : $dayjs(section.updatedAt).format('YYYY年M月D日(ddd)') }}
                         </v-card-subtitle>
                         
                         <v-divider v-if="menu.overview && section.overview"></v-divider>
@@ -77,7 +77,7 @@
                                 v-if="menu.date"
                                 :style="`color: ${color.date};`"
                             >
-                                {{ (section.date)? section.date : section.updatedAt | format-date }}
+                                {{ (section.date)? $dayjs(section.date).format('YYYY年M月D日(ddd)') : $dayjs(section.updatedAt).format('YYYY年M月D日(ddd)') }}
                             </v-list-item-subtitle>
                             
                             <v-list-item-title

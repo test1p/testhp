@@ -38,7 +38,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-      '~/plugins/moment-filter.js',
+      '~plugins/day.js',
   ],
   /*
   ** Auto import components
@@ -58,7 +58,6 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    ['@nuxtjs/moment', ['ja']],
   ],
   /*
   ** Axios module configuration

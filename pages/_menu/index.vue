@@ -5,12 +5,10 @@
 </template>
 
 <script>
-import Section from '~/components/section.vue';
 import Menu from '~/components/menu.vue';
 
 export default {
     components: {
-        Section,
         Menu
     },
     async asyncData ({ payload, app, params }) {
