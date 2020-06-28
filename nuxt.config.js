@@ -17,8 +17,7 @@ export default {
   ** See https://nuxtjs.org/api/configuration-head
   */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: '奥三河OUTDOOR',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -159,22 +158,14 @@ export default {
                 }
             ]
             
-            var section = null
             menus.forEach(p => {
-                listSections = listsSections[p.params]
-                section = null
-                if (listSections.length == 1) {
-                    section = {section : listSections[0]}
-                    listSections = null
-                }
                 routes = [
                     ...routes,
                     {
                         route: `/${p.params}`,
                         payload: {
-                            section,
                             menu: p,
-                            sections: listSections,
+                            sections: listsSections[p.params],
                             menus: {header, footer},
                             layout
                         }

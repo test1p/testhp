@@ -19,9 +19,9 @@
                         :x-small="$vuetify.breakpoint.xs"
                         color="grey"
                         class="px-1"
-                        :text="!props.item.icon"
-                        :rounded="!props.item.icon"
-                        :icon="props.item.icon"
+                        :text="(props.item.icon)? false : true"
+                        :rounded="(props.item.icon)? false : true"
+                        :icon="(props.item.icon)? true : false"
                         exact
                         nuxt
                         >
