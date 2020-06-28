@@ -106,6 +106,8 @@ export default {
             var routes = []
             layout = layout.data.contents[0]
             menus = menus.data.contents
+            var header = menus.filter(x => x.header)
+            var footer = menus.filter(x => x.footer)
             sections = sections.data.contents
             var homeSections = layout.layout
             layout = {
@@ -119,34 +121,40 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                }
+                },
+                bread: layout.bread
             }
             var listSections = []
             var listsSections = []
+            var num = []
             menus.forEach(y => {
                 listSections = sections.filter(z => {
                     if (z.menu) {
                         if (z.menu.params == y.params) {
                             return true
                         }
-                        else {
-                            return false
-                        }
-                    }
-                    else {
-                        return false
                     }
                 })
+                num = homeSections.filter(v => {
+                    if (v.menu && v.num) {
+                        if (v.menu.params == y.params) {
+                            return true
+                        }
+                    }
+                })
+                if (num != '') {
+                    listSections = listSections.filter((w,i) => i < num[0].num)
+                }
                 listsSections = {...listsSections, [y.params]: listSections}
             })
             routes = [
                 {
                     route: '/',
                     payload: {
-                        homeSections: homeSections,
-                        listsSections: listsSections,
-                        menus: menus,
-                        layout: layout
+                        homeSections,
+                        listsSections,
+                        menus: {header, footer},
+                        layout
                     }
                 }
             ]
@@ -164,11 +172,11 @@ export default {
                     {
                         route: `/${p.params}`,
                         payload: {
-                            section: section,
+                            section,
                             menu: p,
                             sections: listSections,
-                            menus: menus,
-                            layout: layout
+                            menus: {header, footer},
+                            layout
                         }
                     }
                 ]
@@ -182,8 +190,8 @@ export default {
                             route: `/${q.menu.params}/${q.id}`,
                             payload: {
                                 section: {section: q },
-                                menus: menus.contents,
-                                layout: layout
+                                menus: {header, footer},
+                                layout
                             }
                         }
                     ]

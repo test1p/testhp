@@ -1,6 +1,6 @@
 <template>
     <v-main :style="style">
-        <Section :section="section" />
+        <Section :section="section" :layout="layout" />
     </v-main>
 </template>
 
@@ -29,6 +29,9 @@ export default {
             var section = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section/${params.id}`, {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
+            menus = menus.contents
+            var header = menus.filter(x => x.header)
+            var footer = menus.filter(x => x.footer)
             layout = layout.contents[0]
             layout = {
                 header: {
@@ -41,12 +44,13 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                }
+                },
+                bread: layout.bread
             }
             return {
-                    section: {section : section },
-                    menus: menus.contents,
-                    layout: layout
+                    section,
+                    menus: {header, footer},
+                    layout
             }
         }
     },

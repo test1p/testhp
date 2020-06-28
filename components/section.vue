@@ -1,23 +1,24 @@
 <template>
     <v-img
-        :src="(section.section.bgImg)? section.section.bgImg.url : undefined"
-        :min-height="(section.section.max)? '100vh' : undefined"
+        :src="(section.bgImg)? section.bgImg.url : undefined"
+        :height="(section.max)? '100vh' : undefined"
     >
         <v-sheet
-            :color="(section.section.bgColor)? section.section.bgColor : 'transparent'"
+            :color="(section.bgColor)? section.bgColor : 'transparent'"
             height="100%"
             tile
         >
-            <v-container class="py-10" style="height:100%;min-height:50vh">
+            <v-container :class="(!$route.params.id)? 'py-10' : 'pt-1 pt-sm-3 px-0' " :style="(section.bgImg)? 'height:100%;' : 'height:100%;min-height:50vh;'">
+                <Bread v-if="layout.bread && $route.params.id" :section="section" />
                 <v-row style="height:100%;" class="justify-center align-center">
                     <v-col
-                        v-if="section.section.contents"
-                        v-html="section.section.contents"
+                        v-if="section.contents"
+                        v-html="section.contents"
                         cols="12"
                         sm="10"
                     ></v-col>
-                    <template v-if="section.section.item">
-                        <template v-if="section.section.slide">
+                    <template v-if="section.item">
+                        <template v-if="section.slide">
                             <v-col cols="12" sm="8" md="6">
                                 <v-carousel
                                     cycle
@@ -26,7 +27,7 @@
                                     hide-delimiter-background
                                 >
                                     <v-carousel-item
-                                        v-for="(item,i) in section.section.item"
+                                        v-for="(item,i) in section.item"
                                         :key="i"
                                     >
                                         <v-card
@@ -51,12 +52,12 @@
                             </v-col>
                         </template>
                         <template v-else>
-                            <template v-for="item in section.section.item">
+                            <template v-for="item in section.item">
                                 <v-col
                                     v-if="!item.expand"
                                     cols="12"
-                                    :sm="(section.section.col)? 8 : 6"
-                                    :md="(section.section.col)? 4 : 6"
+                                    :sm="(section.col)? 8 : 6"
+                                    :md="(section.col)? 4 : 6"
                                     :class="(item.card)? 'align-self-stretch px-4 px-sm-3' : 'align-self-stretch px-4 px-sm-0 py-0'"
                                 >
                                     <template v-if="item.card">
@@ -71,7 +72,7 @@
                                                     :color="(item.bgColor)? item.bgColor : 'transparent'"
                                                     width="100%"
                                                     height="100%"
-                                                    class="pa-10"
+                                                    class="pa-5 pa-sm-8"
                                                 ></v-sheet>
                                             </v-img>
                                         </v-card>
@@ -133,7 +134,8 @@
                                                     v-if="item.contents"
                                                     v-html="item.contents"
                                                     color="transparent"
-                                                    class="ma-auto pa-10"
+                                                    class="ma-auto pa-3"
+                                                    width="100%"
                                                     flat
                                                     tile
                                                 ></v-card>
@@ -144,14 +146,14 @@
                             </template>
                         </template>
                     </template>
-                    <v-col v-if="section.section.movie" cols="12" sm="8" md="6">
+                    <v-col v-if="section.movie" cols="12" sm="8" md="6">
                         <div style="width: 100%;padding-bottom: 56.25%;height: 0px;position: relative;">
                             <iframe
                                 style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);-webkit-transform: translate(-50%, -50%);-ms-transform: translate(-50%, -50%);"
                                 width="100%"
                                 height="100%"
                                 title="Movie"
-                                :src="`https://www.youtube.com/embed/${section.section.movie}`"
+                                :src="`https://www.youtube.com/embed/${section.movie}`"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen
@@ -159,22 +161,21 @@
                         </div>
                     </v-col>
                     <v-col
-                        v-if="section.section.btnLabel&&section.section.btnLink"
+                        v-if="section.btnLabel&&section.btnLink"
                         cols="12"
                         sm="10"
                         class="d-flex justify-center"
                     >
                         <v-btn
-                            :to="section.section.btnLink"
+                            :to="section.btnLink"
                         >
-                            {{ section.section.btnLabel }}
+                            {{ section.btnLabel }}
                         </v-btn>
                     </v-col>
                     <v-col
-                        v-if="section.section.contact"
+                        v-if="section.contact"
                         cols="12"
-                        sm="8"
-                        md="6"
+                        sm="10"
                     >
                         <v-form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
                             <input type="hidden" name="form-name" value="contact">
@@ -216,7 +217,12 @@
 </template>
 
 <script>
+import Bread from '~/components/bread.vue';
+
 export default {
+    components: {
+        Bread
+    },
     data() {
         return {
             name: '',
@@ -225,6 +231,6 @@ export default {
             botField: ''
         }
     },
-    props: ['section']
+    props: ['section', 'layout']
 }
 </script>

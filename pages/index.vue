@@ -2,10 +2,10 @@
     <v-main>
         <template v-for="(homeSection, i) in homeSections">
             <template v-if="homeSection.fieldId=='section'">
-                <Section :section="homeSection" />
+                <Section :section="homeSection.section" :layout="layout" />
             </template>
             <template v-else-if="homeSection.fieldId=='menu'">
-                <List :menu="homeSection.menu" :sections="listsSections[homeSection.menu.params]" />
+                <Menu :menuBg="homeSection" :menu="homeSection.menu" :layout="layout" :sections="listsSections[homeSection.menu.params]" />
             </template>
         </template>
     </v-main>
@@ -13,12 +13,12 @@
 
 <script>
 import Section from '~/components/section.vue';
-import List from '~/components/list.vue';
+import Menu from '~/components/menu.vue';
 
 export default {
     components: {
         Section,
-        List
+        Menu
     },
     async asyncData ({ payload, app }) {
         if(payload) {
@@ -53,32 +53,40 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                }
+                },
+                bread: layout.bread
             }
             menus = menus.contents
+            var header = menus.filter(x => x.header)
+            var footer = menus.filter(x => x.footer)
             var listSections = []
             var listsSections = []
+            var num = []
             menus.forEach(y => {
                 listSections = sections.contents.filter(z => {
                     if (z.menu) {
                         if (z.menu.params == y.params) {
                             return true
                         }
-                        else {
-                            return false
-                        }
-                    }
-                    else {
-                        return false
                     }
                 })
+                num = homeSections.filter(v => {
+                    if (v.menu && v.num) {
+                        if (v.menu.params == y.params) {
+                            return true
+                        }
+                    }
+                })
+                if (num != '') {
+                    listSections = listSections.filter((w,i) => i < num[0].num)
+                }
                 listsSections = {...listsSections, [y.params]: listSections}
             })
             return {
-                    homeSections: homeSections,
-                    listsSections: listsSections,
-                    menus: menus,
-                    layout: layout
+                    homeSections,
+                    listsSections,
+                    menus: {header, footer},
+                    layout
             }
         }
     },
