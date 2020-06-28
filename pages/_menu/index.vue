@@ -61,10 +61,6 @@ export default {
     },
     data() {
         return {
-            name: '',
-            email: '',
-            content: '' ,
-            botField: ''
         }
     },
     mounted () {

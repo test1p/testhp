@@ -189,7 +189,7 @@ export default {
                         {
                             route: `/${q.menu.params}/${q.id}`,
                             payload: {
-                                section: {section: q },
+                                section: q,
                                 menus: {header, footer},
                                 layout
                             }
