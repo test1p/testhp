@@ -243,16 +243,16 @@
                                         name="overview"
                                     ></v-radio>
                                 </v-radio-group>
-                            <v-combobox
+                            <v-select
                                 v-if="radio != radios[0].value"
                                 v-model="service"
                                 :items="items"
                                 :background-color="color.contact.input"
-                                label="対象サービスの選択・入力"
+                                label="対象サービス"
                                 name="service"
                                 multiple
                                 outlined
-                            ></v-combobox>
+                            ></v-select>
                             <v-text-field
                                 v-model="name"
                                 :background-color="color.contact.input"
@@ -315,6 +315,7 @@ export default {
                 '備品提供・レンタル',
                 '運営サポート',
                 'WEB制作',
+                'その他',
             ],
             radio: 'question',
             radios: [
