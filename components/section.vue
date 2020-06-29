@@ -242,6 +242,7 @@
                                 :items="items"
                                 :background-color="color.contact.input"
                                 label="対象サービスの選択・入力"
+                                name="service"
                                 multiple
                                 outlined
                             ></v-combobox>
