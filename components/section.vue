@@ -249,7 +249,7 @@
                                 :items="items"
                                 :background-color="color.contact.input"
                                 label="対象サービス"
-                                name="service"
+                                name="service[]"
                                 multiple
                                 outlined
                             ></v-select>
@@ -310,7 +310,7 @@ export default {
                 btn: {bg: 'rgba(102,153,204,1)', txt: 'white' },
                 contact: {input: 'white'}
             },
-            service: '',
+            service: [],
             items: [
                 '備品提供・レンタル',
                 '運営サポート',
