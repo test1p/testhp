@@ -76,6 +76,14 @@ export default {
             }
         }
         
+    },
+    head () {
+        return {
+            title: this.section.title,
+            meta: [
+                { hid: 'og:title', property: 'og:title', content: this.section.title },
+            ]
+        }
     }
 }
 </script>

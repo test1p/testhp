@@ -78,6 +78,14 @@ export default {
                 return 'margin-top:56px;'
             }
         }
+    },
+    head () {
+        return {
+            title: this.menu.title,
+            meta: [
+                { hid: 'og:title', property: 'og:title', content: this.menu.title },
+            ]
+        }
     }
 }
 </script>

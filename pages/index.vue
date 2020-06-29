@@ -101,6 +101,11 @@ export default {
         updateData () {
             this.$nuxt.$emit('updateData', {menus: this.menus, layout: this.layout})
         }
+    },
+    head () {
+        return {
+            title: 'HOME',
+        }
     }
 }
 </script>

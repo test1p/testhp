@@ -1,32 +1,59 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors';
 const axios = require("axios"); 
 
+// path
+const basePath = 'https://romantic-payne-342f37.netlify.app/';
+
+// meta
+const siteName = '奥三河OUTDOOR';
+const siteDesc = '秘境"奥三河"のアウトドアを楽しもう';
+const siteKeywords = '奥三河,アウトドア,イベント,オリエンテーリング,自然';
+const ogpImages = basePath + 'ogp/';
+
 export default {
-  /*
-  ** Nuxt rendering mode
-  ** See https://nuxtjs.org/api/configuration-mode
-  */
-  mode: 'universal',
-  /*
-  ** Nuxt target
-  ** See https://nuxtjs.org/api/configuration-target
-  */
-  target: 'static',
-  /*
-  ** Headers of the page
-  ** See https://nuxtjs.org/api/configuration-head
-  */
-  head: {
-    title: '奥三河OUTDOOR',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
-  },
+    /*
+    ** Nuxt rendering mode
+    ** See https://nuxtjs.org/api/configuration-mode
+    */
+    mode: 'universal',
+    /*
+    ** Nuxt target
+    ** See https://nuxtjs.org/api/configuration-target
+    */
+    target: 'static',
+    /*
+    ** Headers of the page
+    ** See https://nuxtjs.org/api/configuration-head
+    */
+    head: {
+        htmlAttrs: {
+            prefix: 'og: http://ogp.me/ns#',
+            lang: 'ja'
+        },
+        titleTemplate: `${siteName} - %s`,
+        meta: [
+            // 設定関連
+            { charset: 'utf-8' },
+            { 'http-equiv': 'x-ua-compatible', content: 'ie=edge' },
+            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+          
+            // SEO関連
+            { hid: 'description', name: 'description', content: siteDesc },
+            { hid: 'keywords', name: 'keywords', content: siteKeywords },
+            
+            // ogp関連
+            { hid: 'og:site_name', property: 'og:site_name', content: siteName },
+            { hid: 'og:type', property: 'og:type', content: 'website' },
+            { hid: 'og:url', property: 'og:url', content: basePath },
+            { hid: 'og:title', property: 'og:title', content: siteName },
+            { hid: 'og:description', property: 'og:description', content: siteDesc },
+            { hid: 'og:image', property: 'og:image', content: `${ogpImages}home.jpg` },
+            { name: 'twitter:card', content: 'summary_large_image' },
+        ],
+        link: [
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        ]
+    },
   /*
   ** Global CSS
   */
