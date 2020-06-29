@@ -3,7 +3,7 @@
         :src="(menuBg.bgImg)? menuBg.bgImg.url : undefined"
     >
         <v-sheet
-            :color="(menuBg.bgColor)? menuBg.bgColor : 'transparent'"
+            :color="(menuBg.bgColor)? menuBg.bgColor : color.menu.bg"
             height="100%"
             tile
         >
@@ -36,6 +36,9 @@ export default {
     },
     data() {
         return {
+            color: {
+                menu: {bg: 'rgba(242,242,242,1)'},
+            },
         }
     },
     props: ['menuBg', 'menu', 'layout', 'sections']

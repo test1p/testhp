@@ -10,7 +10,7 @@
                 :height ="(menuBg.titleBgHeight)? menuBg.titleBgHeight : undefined"
             >
                 <v-sheet
-                    :color="(menuBg.titleBgColor)? menuBg.titleBgColor : 'transparent'"
+                    :color="(menuBg.titleBgColor)? menuBg.titleBgColor : color.title.bg"
                     height="100%"
                     tile
                 >
@@ -31,6 +31,9 @@
 export default {
     data() {
         return {
+            color: {
+                title: {bg: 'white'},
+            },
         }
     },
     props: ['menuBg', 'menu']

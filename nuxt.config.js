@@ -1,10 +1,6 @@
 import colors from 'vuetify/es5/util/colors';
 const axios = require("axios"); 
-
-// path
 const basePath = 'https://romantic-payne-342f37.netlify.app/';
-
-// meta
 const siteName = '奥三河OUTDOOR';
 const siteDesc = '秘境"奥三河"のアウトドアを楽しもう';
 const siteKeywords = '奥三河,アウトドア,イベント,オリエンテーリング,自然';

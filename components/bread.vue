@@ -17,7 +17,7 @@
                         :to="props.item.to"
                         :small="!$vuetify.breakpoint.xs"
                         :x-small="$vuetify.breakpoint.xs"
-                        color="grey"
+                        :color="color.bread"
                         class="px-1"
                         :text="(props.item.icon)? false : true"
                         :rounded="(props.item.icon)? false : true"
@@ -54,7 +54,8 @@ export default {
                     disabled: (this.menu)? true : false,
                     to: (this.menu)? `/${this.menu.params}` : `/${this.section.menu.params}`
                 }
-            ]
+            ],
+            color: {bread: 'grey'}
         }
     },
     computed: {

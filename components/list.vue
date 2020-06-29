@@ -16,11 +16,12 @@
                 >
                     <v-card
                         :to="(!section.contents && section.item == '') ? undefined : `/${section.menu.params}/${section.id}/`"
+                        :color="color.list.bg"
                         height="100%"
                         nuxt
                     >
                         <v-card-title
-                            :style="`color: ${color.title};`"
+                            :style="`color: ${color.list.title};`"
                             class="font-weight-bold"
                         >
                             {{ section.title }}
@@ -28,7 +29,7 @@
                         
                         <v-card-subtitle
                             v-if="menu.date"
-                            :style="`color: ${color.date};`"
+                            :style="`color: ${color.list.date};`"
                         >
                             {{ (section.date)? $dayjs(section.date).format('YYYY年M月D日(ddd)') : $dayjs(section.updatedAt).format('YYYY年M月D日(ddd)') }}
                         </v-card-subtitle>
@@ -37,7 +38,7 @@
                         
                         <v-card-text
                             v-if="menu.overview && section.overview"
-                            :style="`color: ${color.overview};`"
+                            :style="`color: ${color.list.overview};`"
                         >
                             {{ section.overview }}
                         </v-card-text>
@@ -63,7 +64,7 @@
             cols="12"
             sm="10"
         >
-            <v-list class="py-0">
+            <v-list class="py-0" :color="color.list.bg">
                 <v-divider></v-divider>
                 <template v-for="section in sections">
                     <v-list-item
@@ -75,13 +76,13 @@
                         <v-list-item-content>
                             <v-list-item-subtitle
                                 v-if="menu.date"
-                                :style="`color: ${color.date};`"
+                                :style="`color: ${color.list.date};`"
                             >
                                 {{ (section.date)? $dayjs(section.date).format('YYYY年M月D日(ddd)') : $dayjs(section.updatedAt).format('YYYY年M月D日(ddd)') }}
                             </v-list-item-subtitle>
                             
                             <v-list-item-title
-                                :style="`color: ${color.title};`"
+                                :style="`color: ${color.list.title};`"
                                 class="font-weight-bold"
                             >
                                 {{ section.title }}
@@ -89,7 +90,7 @@
                             
                             <v-list-item-subtitle
                                 v-if="menu.overview && section.overview"
-                                :style="`color: ${color.overview};`"
+                                :style="`color: ${color.list.overview};`"
                             >
                                 {{ section.overview }}
                             </v-list-item-subtitle>
@@ -119,9 +120,12 @@ export default {
     data() {
         return {
             color: {
-                title: 'rgba(51,51,51,1)',
-                date: 'rgba(128,128,128,1)',
-                overview: 'rgba(128,128,128,1)'
+                list: {
+                    bg: 'white',
+                    title: 'rgba(51,51,51,1)',
+                    date: 'rgba(128,128,128,1)',
+                    overview: 'rgba(128,128,128,1)'
+                }
             }
         }
     },

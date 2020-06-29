@@ -4,7 +4,7 @@
         :height="(section.max)? '100vh' : undefined"
     >
         <v-sheet
-            :color="(section.bgColor)? section.bgColor : 'transparent'"
+            :color="(section.bgColor)? section.bgColor : color.section.bg"
             height="100%"
             tile
         >
@@ -40,7 +40,7 @@
                                                 <v-sheet
                                                     v-if="item.contents"
                                                     v-html="item.contents"
-                                                    :color="(item.bgColor)? item.bgColor : 'transparent'"
+                                                    :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                     width="100%"
                                                     height="100%"
                                                     class="pa-10"
@@ -67,33 +67,55 @@
                                         >
                                             <v-img :src="(item.bgImg)? item.bgImg.url : undefined" width="100%" height="100%">
                                                 <v-sheet
-                                                    v-if="item.contents"
-                                                    v-html="item.contents"
-                                                    :color="(item.bgColor)? item.bgColor : 'transparent'"
+                                                    :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                     width="100%"
                                                     height="100%"
                                                     class="pa-5 pa-sm-8"
-                                                ></v-sheet>
+                                                >
+                                                    <div
+                                                        v-if="item.contents"
+                                                        v-html="item.contents"
+                                                    ></div>
+                                                    <v-btn
+                                                        v-if="item.btnLabel && item.btnLink"
+                                                        :to="item.btnLink"
+                                                        :color="color.btn.bg"
+                                                        :style="`color:${color.btn.txt};`"
+                                                    >
+                                                        {{ item.btnLabel }}
+                                                    </v-btn>
+                                                </v-sheet>
                                             </v-img>
                                         </v-card>
                                     </template>
                                     <template v-else>
                                         <v-img :src="(item.bgImg)? item.bgImg.url : undefined" width="100%" height="100%">
                                             <v-sheet
-                                                :color="(item.bgColor)? item.bgColor : 'transparent'"
+                                                :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                 height="100%"
                                                 width="100%"
                                                 class="d-flex"
                                                 tile
                                             >
                                                 <v-card
-                                                    v-if="item.contents"
-                                                    v-html="item.contents"
                                                     color="transparent"
                                                     class="ma-auto pa-10"
                                                     flat
                                                     tile
-                                                ></v-card>
+                                                >
+                                                    <div
+                                                        v-if="item.contents"
+                                                        v-html="item.contents"
+                                                    ></div>
+                                                    <v-btn
+                                                        v-if="item.btnLabel && item.btnLink"
+                                                        :to="item.btnLink"
+                                                        :color="color.btn.bg"
+                                                        :style="`color:${color.btn.txt};`"
+                                                    >
+                                                        {{ item.btnLabel }}
+                                                    </v-btn>
+                                                </v-card>
                                             </v-sheet>
                                         </v-img>
                                     </template>
@@ -111,34 +133,56 @@
                                         >
                                             <v-img :src="(item.bgImg)? item.bgImg.url : undefined" width="100%" height="100%">
                                                 <v-sheet
-                                                    v-if="item.contents"
-                                                    v-html="item.contents"
-                                                    :color="(item.bgColor)? item.bgColor : 'transparent'"
+                                                    :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                     width="100%"
                                                     height="100%"
                                                     class="pa-10"
-                                                ></v-sheet>
+                                                >
+                                                    <div
+                                                        v-if="item.contents"
+                                                        v-html="item.contents"
+                                                    ></div>
+                                                    <v-btn
+                                                        v-if="item.btnLabel && item.btnLink"
+                                                        :to="item.btnLink"
+                                                        :color="color.btn.bg"
+                                                        :style="`color:${color.btn.txt};`"
+                                                    >
+                                                        {{ item.btnLabel }}
+                                                    </v-btn>
+                                                </v-sheet>
                                             </v-img>
                                         </v-card>
                                     </template>
                                     <template v-else>
                                         <v-img :src="(item.bgImg)? item.bgImg.url : undefined" width="100%" height="100%">
                                             <v-sheet
-                                                :color="(item.bgColor)? item.bgColor : 'transparent'"
+                                                :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                 height="100%"
                                                 width="100%"
                                                 class="d-flex"
                                                 tile
                                             >
                                                 <v-card
-                                                    v-if="item.contents"
-                                                    v-html="item.contents"
                                                     color="transparent"
                                                     class="ma-auto pa-3"
                                                     width="100%"
                                                     flat
                                                     tile
-                                                ></v-card>
+                                                >
+                                                    <div
+                                                        v-if="item.contents"
+                                                        v-html="item.contents"
+                                                    ></div>
+                                                    <v-btn
+                                                        v-if="item.btnLabel && item.btnLink"
+                                                        :to="item.btnLink"
+                                                        :color="color.btn.bg"
+                                                        :style="`color:${color.btn.txt};`"
+                                                    >
+                                                        {{ item.btnLabel }}
+                                                    </v-btn>
+                                                </v-card>
                                             </v-sheet>
                                         </v-img>
                                     </template>
@@ -168,6 +212,8 @@
                     >
                         <v-btn
                             :to="section.btnLink"
+                            :color="color.btn.bg"
+                            :style="`color:${color.btn.txt};`"
                         >
                             {{ section.btnLabel }}
                         </v-btn>
@@ -179,18 +225,43 @@
                     >
                         <v-form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
                             <input type="hidden" name="form-name" value="contact">
+                                <v-radio-group
+                                    v-model="radio"
+                                    row
+                                >
+                                    <v-radio
+                                        v-for="radio in radios"
+                                        :key="radio.label"
+                                        :label="radio.label"
+                                        :value="radio.value"
+                                        name="overview"
+                                    ></v-radio>
+                                </v-radio-group>
+                            <v-combobox
+                                v-if="radio != radios[0].value"
+                                :items="items"
+                                :background-color="color.contact.input"
+                                label="対象サービスの選択・入力"
+                                multiple
+                                outlined
+                            ></v-combobox>
                             <v-text-field
                                 v-model="name"
+                                :background-color="color.contact.input"
                                 label="名前"
                                 name="name"
+                                outlined
                             ></v-text-field>
                             <v-text-field
                                 v-model="email"
+                                :background-color="color.contact.input"
                                 label="メールアドレス"
                                 name="email"
+                                outlined
                             ></v-text-field>
                             <v-textarea
                                 v-model="content"
+                                :background-color="color.contact.input"
                                 label="内容"
                                 name="content"
                                 outlined
@@ -203,8 +274,8 @@
                             />
                             <v-btn
                                 type="submit"
-                                color="postTitleBg"
-                                class="postTitleTxt--text"
+                                :color="color.btn.bg"
+                                :style="`color:${color.btn.txt};`"
                             >
                                 送信
                             </v-btn>
@@ -225,10 +296,27 @@ export default {
     },
     data() {
         return {
+            color: {
+                section: {bg: 'rgba(242,242,242,1)'},
+                item: {bg: 'white'},
+                btn: {bg: 'rgba(102,153,204,1)', txt: 'white' },
+                contact: {input: 'white'}
+            },
             name: '',
             email: '',
             content: '' ,
-            botField: ''
+            botField: '',
+            radio: 'question',
+            radios: [
+                {label: 'ご質問', value: 'question'},
+                {label: 'お見積', value: 'estimation'},
+                {label: 'ご依頼', value: 'request'},
+            ],
+            items: [
+                '備品提供・レンタル',
+                '運営サポート',
+                'WEB制作',
+            ]
         }
     },
     props: ['section', 'layout']
