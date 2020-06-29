@@ -244,7 +244,6 @@
                                     ></v-radio>
                                 </v-radio-group>
                             <v-select
-                                v-if="radio != radios[0].value"
                                 v-model="service"
                                 :items="items"
                                 :background-color="color.contact.input"
