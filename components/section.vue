@@ -223,7 +223,13 @@
                         cols="12"
                         sm="10"
                     >
-                        <v-form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+                        <v-form
+                            name="contact"
+                            method="POST"
+                            data-netlify="true"
+                            netlify-honeypot="bot-field"
+                            action="/"
+                        >
                             <input type="hidden" name="form-name" value="contact">
                                 <v-radio-group
                                     v-model="radio"
@@ -239,6 +245,7 @@
                                 </v-radio-group>
                             <v-combobox
                                 v-if="radio != radios[0].value"
+                                v-model="service"
                                 :items="items"
                                 :background-color="color.contact.input"
                                 label="対象サービスの選択・入力"
@@ -303,21 +310,22 @@ export default {
                 btn: {bg: 'rgba(102,153,204,1)', txt: 'white' },
                 contact: {input: 'white'}
             },
-            name: '',
-            email: '',
-            content: '' ,
-            botField: '',
+            service: '',
+            items: [
+                '備品提供・レンタル',
+                '運営サポート',
+                'WEB制作',
+            ],
             radio: 'question',
             radios: [
                 {label: 'ご質問', value: 'question'},
                 {label: 'お見積', value: 'estimation'},
                 {label: 'ご依頼', value: 'request'},
             ],
-            items: [
-                '備品提供・レンタル',
-                '運営サポート',
-                'WEB制作',
-            ]
+            name: '',
+            email: '',
+            content: '' ,
+            botField: ''
         }
     },
     props: ['section', 'layout']
