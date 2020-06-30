@@ -5,7 +5,7 @@
                 <Section :section="homeSection.section" :layout="layout" />
             </template>
             <template v-else-if="homeSection.fieldId=='menu'">
-                <Menu :menuBg="homeSection" :menu="homeSection.menu" :layout="layout" :sections="listsSections[homeSection.menu.params]" />
+                <Menu :menuBg="homeSection" :menu="homeSection.menu" :layout="layout" :sections="listsSections[homeSection.menu.id]" />
             </template>
         </template>
     </v-main>
@@ -31,13 +31,13 @@ export default {
             }
         }
         else if(process.env.NODE_ENV !== 'production') {
-            var layout = await app.$axios.$get(`https://testhp.microcms.io/api/v1/layout?depth=3`, {
+            var layout = await app.$axios.$get('https://testhp.microcms.io/api/v1/layout', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
-            var menus = await app.$axios.$get(`https://testhp.microcms.io/api/v1/menu?depth=3`, {
+            var menus = await app.$axios.$get('https://testhp.microcms.io/api/v1/menu', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
-            var sections = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section?depth=3`, {
+            var sections = await app.$axios.$get('https://testhp.microcms.io/api/v1/section', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
             layout = layout.contents[0]
@@ -65,14 +65,14 @@ export default {
             menus.forEach(y => {
                 listSections = sections.contents.filter(z => {
                     if (z.menu) {
-                        if (z.menu.params == y.params) {
+                        if (z.menu.id == y.id) {
                             return true
                         }
                     }
                 })
                 num = homeSections.filter(v => {
                     if (v.menu && v.num) {
-                        if (v.menu.params == y.params) {
+                        if (v.menu.id == y.id) {
                             return true
                         }
                     }
@@ -80,7 +80,7 @@ export default {
                 if (num != '') {
                     listSections = listSections.filter((w,i) => i < num[0].num)
                 }
-                listsSections = {...listsSections, [y.params]: listSections}
+                listsSections = {...listsSections, [y.id]: listSections}
             })
             return {
                     homeSections,

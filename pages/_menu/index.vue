@@ -21,17 +21,17 @@ export default {
             }
         }
         else if(process.env.NODE_ENV !== 'production') {
-            var layout = await app.$axios.$get(`https://testhp.microcms.io/api/v1/layout?depth=3`, {
+            var layout = await app.$axios.$get('https://testhp.microcms.io/api/v1/layout', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
-            var menus = await app.$axios.$get(`https://testhp.microcms.io/api/v1/menu?depth=3`, {
+            var menus = await app.$axios.$get('https://testhp.microcms.io/api/v1/menu', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
             menus = menus.contents
             var header = menus.filter(x => x.header)
             var footer = menus.filter(x => x.footer)
-            var menu = menus.filter(x =>x.params == params.menu)
-            var sections = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section?filters=menu[equals]${menu[0].id}`, {
+            var menu = menus.filter(x =>x.id == params.menu)
+            var sections = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section?filters=menu[equals]${params.menu}`, {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
             layout = layout.contents[0]

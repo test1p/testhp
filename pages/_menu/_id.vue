@@ -20,10 +20,10 @@ export default {
             }
         }
         else if(process.env.NODE_ENV !== 'production') {
-            var layout = await app.$axios.$get(`https://testhp.microcms.io/api/v1/layout?depth=3`, {
+            var layout = await app.$axios.$get('https://testhp.microcms.io/api/v1/layout', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
-            var menus = await app.$axios.$get(`https://testhp.microcms.io/api/v1/menu?depth=3`, {
+            var menus = await app.$axios.$get('https://testhp.microcms.io/api/v1/menu', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
             var section = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section/${params.id}`, {

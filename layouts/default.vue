@@ -49,7 +49,7 @@
                 <v-list-item
                   v-for="(menu,i) in menus.header"
                     :key="i"
-                    :to="`/${menu.params}`"
+                    :to="`/${menu.id}`"
                     nuxt
                 >
                   <v-list-item-title>{{ menu.title }}</v-list-item-title>
@@ -60,8 +60,8 @@
             <v-toolbar-items v-else>
                 <template v-for="(menu,i) in menus.header">
                 <v-btn
-                    v-if="menu.params != 'contact'"
-                    :to="`/${menu.params}`"
+                    v-if="menu.id != 'contact'"
+                    :to="`/${menu.id}`"
                     color="transparent"
                     :small="$vuetify.breakpoint.sm"
                     :style="`color: ${layout.header.txtColor};`"
@@ -72,7 +72,7 @@
                 </v-btn>
                 <div v-else class="d-flex">
                     <v-btn
-                        :to="`/${menu.params}`"
+                        :to="`/${menu.id}`"
                         :color="layout.header.txtColor"
                         :small="$vuetify.breakpoint.sm"
                         class="align-self-center"
@@ -99,7 +99,7 @@
                     >
                         <v-btn
                             
-                            :to="`/${menu.params}`"
+                            :to="`/${menu.id}`"
                             :color="layout.footer.txtColor"
                             text
                             rounded

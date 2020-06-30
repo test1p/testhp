@@ -15,7 +15,7 @@
                     class="align-self-stretch"
                 >
                     <v-card
-                        :to="(!section.contents && section.item == '') ? undefined : `/${section.menu.params}/${section.id}/`"
+                        :to="(!section.contents && section.item == '') ? undefined : `/${section.menu.id}/${section.id}/`"
                         :color="color.list.bg"
                         height="100%"
                         nuxt
@@ -70,7 +70,7 @@
                     <v-list-item
                         :key="section.id"
                         three-line
-                        @click="$router.push(`/${section.menu.params}/${section.id}/`)"
+                        @click="$router.push(`/${section.menu.id}/${section.id}/`)"
                         :disabled="!section.contents && section.item == ''"
                     >
                         <v-list-item-content>

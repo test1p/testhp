@@ -52,7 +52,7 @@ export default {
                 {
                     text: (this.menu)? this.menu.title : this.section.menu.title,
                     disabled: (this.menu)? true : false,
-                    to: (this.menu)? `/${this.menu.params}` : `/${this.section.menu.params}`
+                    to: (this.menu)? `/${this.menu.id}` : `/${this.section.menu.id}`
                 }
             ],
             color: {bread: 'grey'}
@@ -67,7 +67,7 @@ export default {
                     {
                         text: this.section.title,
                         disabled: true,
-                        to: `/${this.section.menu.params}/${this.section.id}`
+                        to: `/${this.section.menu.id}/${this.section.id}`
                     }
                 ]
             }

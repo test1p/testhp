@@ -117,13 +117,13 @@ export default {
   },
   generate: {
         routes: async function () {
-            var layout = await axios.get(`https://testhp.microcms.io/api/v1/layout?depth=3`, {
+            var layout = await axios.get('https://testhp.microcms.io/api/v1/layout', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
-            var menus = await axios.get(`https://testhp.microcms.io/api/v1/menu?depth=3`, {
+            var menus = await axios.get('https://testhp.microcms.io/api/v1/menu', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
-            var sections = await axios.get(`https://testhp.microcms.io/api/v1/section?depth=3`, {
+            var sections = await axios.get('https://testhp.microcms.io/api/v1/section', {
                 headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
             })
             var routes = []
@@ -153,14 +153,14 @@ export default {
             menus.forEach(y => {
                 listSections = sections.filter(z => {
                     if (z.menu) {
-                        if (z.menu.params == y.params) {
+                        if (z.menu.id == y.id) {
                             return true
                         }
                     }
                 })
                 num = homeSections.filter(v => {
                     if (v.menu && v.num) {
-                        if (v.menu.params == y.params) {
+                        if (v.menu.id == y.id) {
                             return true
                         }
                     }
@@ -168,7 +168,7 @@ export default {
                 if (num != '') {
                     listSections = listSections.filter((w,i) => i < num[0].num)
                 }
-                listsSections = {...listsSections, [y.params]: listSections}
+                listsSections = {...listsSections, [y.id]: listSections}
             })
             routes = [
                 {
@@ -186,10 +186,10 @@ export default {
                 routes = [
                     ...routes,
                     {
-                        route: `/${p.params}`,
+                        route: `/${p.id}`,
                         payload: {
                             menu: p,
-                            sections: listsSections[p.params],
+                            sections: listsSections[p.id],
                             menus: {header, footer},
                             layout
                         }
@@ -202,7 +202,7 @@ export default {
                     routes = [
                         ...routes,
                         {
-                            route: `/${q.menu.params}/${q.id}`,
+                            route: `/${q.menu.id}/${q.id}`,
                             payload: {
                                 section: q,
                                 menus: {header, footer},
