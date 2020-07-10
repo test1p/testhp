@@ -1,6 +1,6 @@
 <template>
     <v-main :style="style">
-        <Section :section="section" :layout="layout" />
+        <Section :section="section" />
     </v-main>
 </template>
 
@@ -20,19 +20,20 @@ export default {
             }
         }
         else if(process.env.NODE_ENV !== 'production') {
-            var layout = await app.$axios.$get('https://testhp.microcms.io/api/v1/layout', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var serviceId = process.env.serviceId
+            var apiKey = process.env.apiKey
+            var layout = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/layout/layout`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var menus = await app.$axios.$get('https://testhp.microcms.io/api/v1/menu', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var menus = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/menu`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var section = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section/${params.id}`, {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var section = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/section/${params.id}`, {
+                headers: { 'X-API-KEY': apiKey }
             })
             menus = menus.contents
             var header = menus.filter(x => x.header)
             var footer = menus.filter(x => x.footer)
-            layout = layout.contents[0]
             layout = {
                 header: {
                     title: (layout.title)? layout.title: '',
@@ -44,8 +45,7 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                },
-                bread: layout.bread
+                }
             }
             return {
                     section,

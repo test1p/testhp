@@ -1,15 +1,29 @@
 <template>
     <v-main :style="style">
-        <Menu :menuBg="menu" :menu="menu" :layout="layout" :sections="sections" />
+        <Menu :menu="menu" />
+        <template v-if="menu.list != null">
+            <List :list="menu.list" :sections="sections" />
+        </template>
+        <template v-else>
+            <Section
+                v-for="section in sections"
+                :key="section.id"
+                :section="section"
+            />
+        </template>
     </v-main>
 </template>
 
 <script>
 import Menu from '~/components/menu.vue';
+import List from '~/components/list.vue';
+import Section from '~/components/section.vue';
 
 export default {
     components: {
-        Menu
+        Menu,
+        List,
+        Section
     },
     async asyncData ({ payload, app, params }) {
         if(payload) {
@@ -21,20 +35,21 @@ export default {
             }
         }
         else if(process.env.NODE_ENV !== 'production') {
-            var layout = await app.$axios.$get('https://testhp.microcms.io/api/v1/layout', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var serviceId = process.env.serviceId
+            var apiKey = process.env.apiKey
+            var layout = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/layout/layout`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var menus = await app.$axios.$get('https://testhp.microcms.io/api/v1/menu', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var menus = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/menu`, {
+                headers: { 'X-API-KEY': apiKey }
             })
             menus = menus.contents
             var header = menus.filter(x => x.header)
             var footer = menus.filter(x => x.footer)
             var menu = menus.filter(x =>x.id == params.menu)
-            var sections = await app.$axios.$get(`https://testhp.microcms.io/api/v1/section?filters=menu[equals]${params.menu}`, {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var sections = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/section?filters=menu[equals]${params.menu}`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            layout = layout.contents[0]
             layout = {
                 header: {
                     title: (layout.title)? layout.title: '',
@@ -46,8 +61,7 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                },
-                bread: layout.bread
+                }
             }
             return {
                     menu: menu[0],

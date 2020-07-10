@@ -1,12 +1,43 @@
 import colors from 'vuetify/es5/util/colors';
 const axios = require("axios"); 
-const basePath = 'https://romantic-payne-342f37.netlify.app/';
-const siteName = '奥三河OUTDOOR';
-const siteDesc = '秘境"奥三河"のアウトドアを楽しもう';
-const siteKeywords = '奥三河,アウトドア,イベント,オリエンテーリング,自然';
-const ogpImages = basePath + 'ogp/';
+require('dotenv').config()
+const serviceId = process.env.NUXT_ENV_SERVICE_ID
+const apiKey = process.env.NUXT_ENV_API_KEY
+const siteName = process.env.NUXT_ENV_SITE_NAME
+const siteUrl = process.env.NUXT_ENV_SITE_URL
+const siteDesc = process.env.NUXT_ENV_SITE_DESC
+const siteKeywords = process.env.NUXT_ENV_SITE_KEYWORDS
+
 
 export default {
+    env: {
+        serviceId: serviceId,
+        apiKey: apiKey,
+        siteName: siteName,
+        topTitle: process.env.NUXT_ENV_TOP_TITLE,
+        topTemplate: process.env.NUXT_ENV_TOP_TEMPLATE,
+        colorSectionBg: process.env.NUXT_ENV_COLOR_SECTION_BG,
+        colorItemBg: process.env.NUXT_ENV_COLOR_ITEM_BG,
+        colorBtnBg: process.env.NUXT_ENV_COLOR_BTN_BG,
+        colorBtnTxt: process.env.NUXT_ENV_COLOR_BTN_TXT,
+        colorContactInput: process.env.NUXT_ENV_COLOR_CONTACT_INPUT,
+        colorContactBtn: process.env.NUXT_ENV_COLOR_CONTACT_BTN,
+        colorMenuBg: process.env.NUXT_ENV_COLOR_MENU_BG,
+        colorTitlebg: process.env.NUXT_ENV_COLOR_TITLE_BG,
+        colorListBg: process.env.NUXT_ENV_COLOR_LIST_BG,
+        colorListTitle: process.env.NUXT_ENV_COLOR_LIST_TITLE,
+        colorListDate: process.env.NUXT_ENV_COLOR_LIST_DATE,
+        colorListOverview: process.env.NUXT_ENV_COLOR_LIST_OVERVIEW,
+        colorBread:  process.env.NUXT_ENV_COLOR_BREAD,
+        contactSelections: process.env.NUXT_ENV_CONTACT_SELECTIONS,
+        contactComboLabel: process.env.NUXT_ENV_CONTACT_COMBO_LABEL,
+        contactComboItems: process.env.NUXT_ENV_CONTACT_COMBO_ITEMS,
+        contactCorporateLabel: process.env.NUXT_ENV_CONTACT_CORPORATE_LABEL,
+        contactNameLabel: process.env.NUXT_ENV_CONTACT_NAME_LABEL,
+        contactEmailLabel: process.env.NUXT_ENV_CONTACT_EMAIL_LABEL,
+        contactContentLabel: process.env.NUXT_ENV_CONTACT_CONTENT_LABEL,
+        bread: process.env.NUXT_ENV_BREAD
+    },
     /*
     ** Nuxt rendering mode
     ** See https://nuxtjs.org/api/configuration-mode
@@ -26,7 +57,7 @@ export default {
             prefix: 'og: http://ogp.me/ns#',
             lang: 'ja'
         },
-        titleTemplate: `${siteName} - %s`,
+        titleTemplate: `%s - ${siteName}`,
         meta: [
             // 設定関連
             { charset: 'utf-8' },
@@ -40,10 +71,10 @@ export default {
             // ogp関連
             { hid: 'og:site_name', property: 'og:site_name', content: siteName },
             { hid: 'og:type', property: 'og:type', content: 'website' },
-            { hid: 'og:url', property: 'og:url', content: basePath },
+            { hid: 'og:url', property: 'og:url', content: siteUrl },
             { hid: 'og:title', property: 'og:title', content: siteName },
             { hid: 'og:description', property: 'og:description', content: siteDesc },
-            { hid: 'og:image', property: 'og:image', content: `${ogpImages}home.jpg` },
+            { hid: 'og:image', property: 'og:image', content: `${siteUrl}ogp/home.jpg` },
             { name: 'twitter:card', content: 'summary_large_image' },
         ],
         link: [
@@ -81,6 +112,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/dotenv',
   ],
   /*
   ** Axios module configuration
@@ -117,17 +149,17 @@ export default {
   },
   generate: {
         routes: async function () {
-            var layout = await axios.get('https://testhp.microcms.io/api/v1/layout', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var layout = await axios.get(`https://${serviceId}.microcms.io/api/v1/layout/layout`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var menus = await axios.get('https://testhp.microcms.io/api/v1/menu', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var menus = await axios.get(`https://${serviceId}.microcms.io/api/v1/menu`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var sections = await axios.get('https://testhp.microcms.io/api/v1/section', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var sections = await axios.get(`https://${serviceId}.microcms.io/api/v1/section`, {
+                headers: { 'X-API-KEY': apiKey }
             })
             var routes = []
-            layout = layout.data.contents[0]
+            layout = layout.data
             menus = menus.data.contents
             var header = menus.filter(x => x.header)
             var footer = menus.filter(x => x.footer)
@@ -144,12 +176,10 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                },
-                bread: layout.bread
+                }
             }
             var listSections = []
             var listsSections = []
-            var num = []
             menus.forEach(y => {
                 listSections = sections.filter(z => {
                     if (z.menu) {
@@ -158,15 +188,10 @@ export default {
                         }
                     }
                 })
-                num = homeSections.filter(v => {
-                    if (v.menu && v.num) {
-                        if (v.menu.id == y.id) {
-                            return true
-                        }
+                if (y.list != null) {
+                    if (y.list.num) {
+                        listSections = listSections.filter((w,i) => i < y.list.num)
                     }
-                })
-                if (num != '') {
-                    listSections = listSections.filter((w,i) => i < num[0].num)
                 }
                 listsSections = {...listsSections, [y.id]: listSections}
             })

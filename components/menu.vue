@@ -1,46 +1,63 @@
 <template>
-    <v-img
-        :src="(menuBg.bgImg)? menuBg.bgImg.url : undefined"
+    <v-sheet
+        :color="(menu.bgColor)? menu.bgColor : color.menu.bg"
+        tile
+        width="100%"
+        class="d-flex justify-center"
     >
-        <v-sheet
-            :color="(menuBg.bgColor)? menuBg.bgColor : color.menu.bg"
-            height="100%"
-            tile
+        <v-img
+            :src="(bgImg)? bgImg : undefined"
+            :style="(bgImg)? 'background: white;' : undefined"
+            :max-width="($vuetify.breakpoint.lgAndUp)? '1264px' : '100vw'"
         >
-            <v-container :class="($route.path == '/')? 'py-10' : 'pt-2 pb-16'">
-                <Bread v-if="layout.bread && $route.path !='/'" :menu="menu" />
-                <Title :menuBg="menuBg" :menu="menu" />
-                <template v-if="menu.section">
-                    <Section v-for="section in sections" :key="section.id" :section="section" :layout="layout" />
-                </template>
-                <template v-else>
-                    <List :menu="menu" :sections="sections" />
-                </template>
-            </v-container>
-        </v-sheet>
-    </v-img>
+            <v-sheet
+                :color="(bgImg && menu.bgColor)? menu.bgColor : 'transparent'"
+                tile
+                height="100%"
+            >
+                <v-container :class="(bread == 'true' && $route.params.menu)? 'pt-3 pb-10' : 'py-10'" style="height:100%;">
+                    <Bread v-if="bread == 'true' && $route.params.menu" :menu="menu" />
+                    <v-row :id="menu.id" class="justify-center align-center">
+                        <v-col
+                            v-if="menu.contents"
+                            v-html="menu.contents"
+                            cols="12"
+                            sm="10"
+                        ></v-col>
+                    </v-row>
+                </v-container>
+            </v-sheet>
+        </v-img>
+    </v-sheet>
 </template>
 
 <script>
-import Title from '~/components/title.vue';
-import Bread from '~/components/bread.vue';
-import Section from '~/components/section.vue';
-import List from '~/components/list.vue';
 
 export default {
-    components: {
-        Title,
-        Bread,
-        Section,
-        List
-    },
     data() {
         return {
             color: {
-                menu: {bg: 'rgba(242,242,242,1)'},
+                menu: {bg: process.env.colorMenuBg},
             },
+            bread: process.env.bread
         }
     },
-    props: ['menuBg', 'menu', 'layout', 'sections']
+    computed: {
+        bgImg () {
+            if (this.menu.bgImg) {
+                var bgImg = this.menu.bgImg.url
+                if (this.$vuetify.breakpoint.xs) {
+                    return `${bgImg}?auto=compress&fit=clip&w=600`
+                }
+                else if (this.$vuetify.breakpoint.sm) {
+                    return `${bgImg}?auto=compress&fit=clip&w=960`
+                }
+                else {
+                    return `${bgImg}?auto=compress&fit=clip&w=1264`
+                }
+            }
+        }
+    },
+    props: ['menu']
 }
 </script>

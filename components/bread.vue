@@ -2,7 +2,6 @@
     <v-row no-gutters class="justify-center align-center">
         <v-col
             cols="12"
-            sm="10"
             class="pt-0 pb-1 px-4"
         >
             <v-breadcrumbs
@@ -55,7 +54,7 @@ export default {
                     to: (this.menu)? `/${this.menu.id}` : `/${this.section.menu.id}`
                 }
             ],
-            color: {bread: 'grey'}
+            color: {bread: process.env.colorBread}
         }
     },
     computed: {

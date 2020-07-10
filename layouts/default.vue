@@ -73,7 +73,7 @@
                 <div v-else class="d-flex">
                     <v-btn
                         :to="`/${menu.id}`"
-                        :color="layout.header.txtColor"
+                        :color="color.contact.btn"
                         :small="$vuetify.breakpoint.sm"
                         class="align-self-center"
                         rounded
@@ -129,6 +129,11 @@ export default {
     data () {
         return {
             scroll: false,
+            color: {
+                contact: {
+                    btn: process.env.colorContactBtn
+                }
+            },
             menus: [],
             layout: {
                 header: {

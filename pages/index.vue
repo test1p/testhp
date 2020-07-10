@@ -1,24 +1,34 @@
 <template>
     <v-main>
         <template v-for="(homeSection, i) in homeSections">
-            <template v-if="homeSection.fieldId=='section'">
-                <Section :section="homeSection.section" :layout="layout" />
+            <template v-if="homeSection.fieldId=='menu'">
+                <Menu :menu="homeSection.menu" />
+                <template v-if="homeSection.menu.list != null">
+                    <List :list="homeSection.menu.list" :sections="listsSections[homeSection.menu.id]" />
+                </template>
+                <template v-else>
+                    <Section
+                        v-for="section in listsSections[homeSection.menu.id]"
+                        :key="section.id"
+                        :section="section"
+                    />
+                </template>
             </template>
-            <template v-else-if="homeSection.fieldId=='menu'">
-                <Menu :menuBg="homeSection" :menu="homeSection.menu" :layout="layout" :sections="listsSections[homeSection.menu.id]" />
+            <template v-else>
+                <Section :section="homeSection.section" />
             </template>
         </template>
     </v-main>
 </template>
 
 <script>
-import Section from '~/components/section.vue';
 import Menu from '~/components/menu.vue';
+import Section from '~/components/section.vue';
 
 export default {
     components: {
-        Section,
-        Menu
+        Menu,
+        Section
     },
     async asyncData ({ payload, app }) {
         if(payload) {
@@ -31,16 +41,17 @@ export default {
             }
         }
         else if(process.env.NODE_ENV !== 'production') {
-            var layout = await app.$axios.$get('https://testhp.microcms.io/api/v1/layout', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var serviceId = process.env.serviceId
+            var apiKey = process.env.apiKey
+            var layout = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/layout/layout`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var menus = await app.$axios.$get('https://testhp.microcms.io/api/v1/menu', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var menus = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/menu`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            var sections = await app.$axios.$get('https://testhp.microcms.io/api/v1/section', {
-                headers: { 'X-API-KEY': 'b42adfea-8d6f-472e-bb31-ca81a4e8f0a5' }
+            var sections = await app.$axios.$get(`https://${serviceId}.microcms.io/api/v1/section`, {
+                headers: { 'X-API-KEY': apiKey }
             })
-            layout = layout.contents[0]
             var homeSections = layout.layout
             layout = {
                 header: {
@@ -53,15 +64,13 @@ export default {
                     copyright: layout.copyright,
                     bgColor: (layout.bgColorF)? layout.bgColorF : 'blue',
                     txtColor: (layout.txtColorF)? layout.txtColorF : 'white'
-                },
-                bread: layout.bread
+                }
             }
             menus = menus.contents
             var header = menus.filter(x => x.header)
             var footer = menus.filter(x => x.footer)
             var listSections = []
             var listsSections = []
-            var num = []
             menus.forEach(y => {
                 listSections = sections.contents.filter(z => {
                     if (z.menu) {
@@ -70,15 +79,10 @@ export default {
                         }
                     }
                 })
-                num = homeSections.filter(v => {
-                    if (v.menu && v.num) {
-                        if (v.menu.id == y.id) {
-                            return true
-                        }
+                if (y.list != null) {
+                    if (y.list.num) {
+                    listSections = listSections.filter((w,i) => i < y.list.num)
                     }
-                })
-                if (num != '') {
-                    listSections = listSections.filter((w,i) => i < num[0].num)
                 }
                 listsSections = {...listsSections, [y.id]: listSections}
             })
@@ -104,7 +108,8 @@ export default {
     },
     head () {
         return {
-            title: 'HOME',
+            title: process.env.topTitle,
+            titleTemplate: (process.env.topTemplate != '')? process.env.topTemplate : `${process.env.siteName} - %s`
         }
     }
 }

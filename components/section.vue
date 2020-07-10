@@ -1,16 +1,24 @@
 <template>
+    <v-sheet
+        :color="(section.bgColor)? section.bgColor : color.section.bg"
+        tile
+        width="100%"
+        class="d-flex justify-center"
+    >
     <v-img
-        :src="(section.bgImg)? section.bgImg.url : undefined"
+        :src="(bgImg)? bgImg : undefined"
         :height="(section.max)? '100vh' : undefined"
+        :style="(bgImg)? 'background: white;' : undefined"
+        :max-width="($vuetify.breakpoint.lgAndUp && !section.max)? '1264px' : '100vw'"
     >
         <v-sheet
-            :color="(section.bgColor)? section.bgColor : color.section.bg"
-            height="100%"
+            :color="(bgImg && section.bgColor)? section.bgColor : 'transparent'"
             tile
+            height="100%"
         >
-            <v-container :class="(!$route.params.id)? 'py-10' : 'pt-2 pb-10 px-sm-0' " :style="(section.bgImg)? 'height:100%;' : 'height:100%;min-height:50vh;'">
-                <Bread v-if="layout.bread && $route.params.id" :section="section" />
-                <v-row style="height:100%;" class="justify-center align-center">
+            <v-container :class="(bread == 'true' && $route.params.menu)? 'pt-3 pb-10' : 'py-10'" style="height:100%;min-height:50%;">
+                <Bread v-if="bread == 'true' && $route.params.id" :section="section" />
+                <v-row :id="section.id" style="height:100%;" class="justify-center align-center">
                     <v-col
                         v-if="section.contents"
                         v-html="section.contents"
@@ -56,8 +64,8 @@
                                 <v-col
                                     v-if="!item.expand"
                                     cols="12"
-                                    :sm="(section.col)? 8 : 6"
-                                    :md="(section.col)? 4 : 6"
+                                    :sm="(section.col)? 6 : 6"
+                                    :md="(section.col || section.max)? 4 : 6"
                                     :class="(item.card)? 'align-self-stretch px-4 px-sm-3' : 'align-self-stretch px-4 px-sm-0 py-0'"
                                 >
                                     <template v-if="item.card">
@@ -70,51 +78,70 @@
                                                     :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                     width="100%"
                                                     height="100%"
-                                                    class="pa-5 pa-sm-8"
+                                                    :class="(section.col)? 'pa-5 pa-sm-7 pa-md-5' : 'pa-5 pa-sm-7'"
                                                 >
                                                     <div
                                                         v-if="item.contents"
                                                         v-html="item.contents"
                                                     ></div>
-                                                    <v-btn
+                                                    <v-row
                                                         v-if="item.btnLabel && item.btnLink"
-                                                        :to="item.btnLink"
-                                                        :color="color.btn.bg"
-                                                        :style="`color:${color.btn.txt};`"
+                                                        class="py-2 justify-center"
                                                     >
-                                                        {{ item.btnLabel }}
-                                                    </v-btn>
+                                                        <v-btn
+                                                            @click="move(item.btnLink)"
+                                                            :color="color.btn.bg"
+                                                            class="title"
+                                                            outlined
+                                                            large
+                                                        >
+                                                            {{ item.btnLabel }}
+                                                        </v-btn>
+                                                    </v-row>
                                                 </v-sheet>
                                             </v-img>
                                         </v-card>
                                     </template>
                                     <template v-else>
-                                        <v-img :src="(item.bgImg)? item.bgImg.url : undefined" width="100%" height="100%">
+                                        <v-img
+                                            :src="(item.bgImg)? item.bgImg.url : undefined"
+                                            width="100%"
+                                            height="100%"
+                                        >
                                             <v-sheet
                                                 :color="(item.bgColor)? item.bgColor : color.item.bg"
                                                 height="100%"
                                                 width="100%"
-                                                class="d-flex"
+                                                class="d-flex align-items-center"
                                                 tile
                                             >
                                                 <v-card
                                                     color="transparent"
-                                                    class="ma-auto pa-10"
+                                                    :class="(section.col)? 'ma-auto pa-5 pa-sm-7 pa-md-5 d-flex align-center' : 'ma-auto pa-5 pa-sm-7 d-flex align-center'"
+                                                    :height="($vuetify.breakpoint.smAndUp && !section.max)? '100%' : undefined"
+                                                    width="100%"
                                                     flat
                                                     tile
                                                 >
                                                     <div
                                                         v-if="item.contents"
                                                         v-html="item.contents"
+                                                        class="flex-grow-1"
                                                     ></div>
-                                                    <v-btn
+                                                    <v-row
                                                         v-if="item.btnLabel && item.btnLink"
-                                                        :to="item.btnLink"
-                                                        :color="color.btn.bg"
-                                                        :style="`color:${color.btn.txt};`"
+                                                        class="py-2 justify-center"
                                                     >
-                                                        {{ item.btnLabel }}
-                                                    </v-btn>
+                                                        <v-btn
+                                                            @click="move(item.btnLink)"
+                                                            :color="color.btn.bg"
+                                                            :style="`color:${color.btn.txt};`"
+                                                            class="title"
+                                                            large
+                                                        >
+                                                            {{ item.btnLabel }}
+                                                        </v-btn>
+                                                    </v-row>
                                                 </v-card>
                                             </v-sheet>
                                         </v-img>
@@ -142,14 +169,20 @@
                                                         v-if="item.contents"
                                                         v-html="item.contents"
                                                     ></div>
-                                                    <v-btn
+                                                    <v-row
                                                         v-if="item.btnLabel && item.btnLink"
-                                                        :to="item.btnLink"
-                                                        :color="color.btn.bg"
-                                                        :style="`color:${color.btn.txt};`"
+                                                        class="py-2 justify-center"
                                                     >
-                                                        {{ item.btnLabel }}
-                                                    </v-btn>
+                                                        <v-btn
+                                                            @click="move(item.btnLink)"
+                                                            :color="color.btn.bg"
+                                                            class="title"
+                                                            outlined
+                                                            large
+                                                        >
+                                                            {{ item.btnLabel }}
+                                                        </v-btn>
+                                                    </v-row>
                                                 </v-sheet>
                                             </v-img>
                                         </v-card>
@@ -174,14 +207,20 @@
                                                         v-if="item.contents"
                                                         v-html="item.contents"
                                                     ></div>
-                                                    <v-btn
+                                                    <v-row
                                                         v-if="item.btnLabel && item.btnLink"
-                                                        :to="item.btnLink"
-                                                        :color="color.btn.bg"
-                                                        :style="`color:${color.btn.txt};`"
+                                                        class="py-2 justify-center"
                                                     >
-                                                        {{ item.btnLabel }}
-                                                    </v-btn>
+                                                        <v-btn
+                                                            @click="move(item.btnLink)"
+                                                            :color="color.btn.bg"
+                                                            :style="`color:${color.btn.txt};`"
+                                                            class="title"
+                                                            large
+                                                        >
+                                                            {{ item.btnLabel }}
+                                                        </v-btn>
+                                                    </v-row>
                                                 </v-card>
                                             </v-sheet>
                                         </v-img>
@@ -211,9 +250,10 @@
                         class="d-flex justify-center"
                     >
                         <v-btn
-                            :to="section.btnLink"
+                            @click="move(section.btnLink)"
                             :color="color.btn.bg"
                             :style="`color:${color.btn.txt};`"
+                            large
                         >
                             {{ section.btnLabel }}
                         </v-btn>
@@ -231,45 +271,56 @@
                             action="/"
                         >
                             <input type="hidden" name="form-name" value="contact">
-                                <v-radio-group
-                                    v-model="radio"
-                                    row
-                                >
-                                    <v-radio
-                                        v-for="radio in radios"
-                                        :key="radio.label"
-                                        :label="radio.label"
-                                        :value="radio.value"
-                                        name="overview"
-                                    ></v-radio>
-                                </v-radio-group>
+                            <div v-if="selections != ''" class="d-flex">
+                            <v-checkbox
+                                v-for="selection in selections"
+                                :key="selection"
+                                v-model="checked"
+                                :label="selection"
+                                :value="selection"
+                                name="checked[]"
+                                class="pr-4"
+                            ></v-checkbox>
+                            </div>
                             <v-combobox
-                                v-model="service"
+                                v-if="items != '' && comboLabel != ''"
+                                v-model="selected"
                                 :items="items"
                                 :background-color="color.contact.input"
-                                label="対象サービスの選択・入力"
-                                name="service[]"
+                                :label="comboLabel"
+                                name="selected[]"
                                 multiple
                                 outlined
                             ></v-combobox>
                             <v-text-field
-                                v-model="name"
+                                v-if="corporateLabel != ''"
+                                v-model="corporateName"
                                 :background-color="color.contact.input"
-                                label="名前"
-                                name="name"
+                                :label="corporateLabel"
+                                name="corporate-name"
                                 outlined
                             ></v-text-field>
                             <v-text-field
+                                v-if="nameLabel != ''"
+                                v-model="contactName"
+                                :background-color="color.contact.input"
+                                :label="nameLabel"
+                                name="contact-name"
+                                outlined
+                            ></v-text-field>
+                            <v-text-field
+                                v-if="emailLabel != ''"
                                 v-model="email"
                                 :background-color="color.contact.input"
-                                label="メールアドレス"
+                                :label="emailLabel"
                                 name="email"
                                 outlined
                             ></v-text-field>
                             <v-textarea
+                                v-if="contentLabel != ''"
                                 v-model="content"
                                 :background-color="color.contact.input"
-                                label="内容"
+                                :label="contentLabel"
                                 name="content"
                                 outlined
                             ></v-textarea>
@@ -283,6 +334,8 @@
                                 type="submit"
                                 :color="color.btn.bg"
                                 :style="`color:${color.btn.txt};`"
+                                class="title"
+                                large
                             >
                                 送信
                             </v-btn>
@@ -292,6 +345,7 @@
             </v-container>
         </v-sheet>
     </v-img>
+    </v-sheet>
 </template>
 
 <script>
@@ -304,29 +358,72 @@ export default {
     data() {
         return {
             color: {
-                section: {bg: 'rgba(242,242,242,1)'},
-                item: {bg: 'white'},
-                btn: {bg: 'rgba(102,153,204,1)', txt: 'white' },
-                contact: {input: 'white'}
+                section: {bg: process.env.colorSectionBg},
+                item: {bg: process.env.colorItemBg},
+                btn: {bg: process.env.colorBtnBg, txt: process.env.colorBtnTxt},
+                contact: {input: process.env.colorContactInput}
             },
-            service: [],
-            items: [
-                '備品提供・レンタル',
-                '運営サポート',
-                'WEB制作',
-            ],
-            radio: 'question',
-            radios: [
-                {label: 'ご質問', value: 'question'},
-                {label: 'お見積', value: 'estimation'},
-                {label: 'ご依頼', value: 'request'},
-            ],
-            name: '',
+            comboLabel: process.env.contactComboLabel,
+            corporateLabel: process.env.contactCorporateLabel,
+            nameLabel: process.env.contactNameLabel,
+            emailLabel: process.env.contactEmailLabel,
+            contentLabel: process.env.contactContentLabel,
+            selected: [],
+            checked: [],
+            corporateName: '',
+            contactName: '',
             email: '',
             content: '' ,
-            botField: ''
+            botField: '',
+            bread: process.env.bread
         }
     },
-    props: ['section', 'layout']
+    methods: {
+        move (link) {
+            if (link.includes('http')) {
+                return window.open(link, '_blank')
+            }
+            else if (link.includes('#')) {
+                return this.$vuetify.goTo(link, this.option)
+            }
+            else {
+                return this.$router.push(link)
+            }
+        }
+    },
+    computed: {
+        option () {
+            if (this.$vuetify.breakpoint.mdAndUp) {
+                return {offset: 64}
+            }
+            else {
+                return {offset: 56}
+            }
+        },
+        bgImg () {
+            if (this.section.bgImg) {
+                var bgImg = this.section.bgImg.url
+                if (this.$vuetify.breakpoint.xs) {
+                    if (this.section.bgImgS) {
+                        bgImg = this.section.bgImgS.url
+                    }
+                    return `${bgImg}?auto=compress&fit=clip&w=600`
+                }
+                else if (this.$vuetify.breakpoint.sm) {
+                    return `${bgImg}?auto=compress&fit=clip&w=960`
+                }
+                else {
+                    return `${bgImg}?auto=compress&fit=clip&w=1264`
+                }
+            }
+        },
+        selections () {
+            return process.env.contactSelections.split(',')
+        },
+        items () {
+            return process.env.contactComboItems.split(',')
+        }
+    },
+    props: ['section']
 }
 </script>
